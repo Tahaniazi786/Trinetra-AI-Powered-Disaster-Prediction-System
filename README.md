@@ -196,50 +196,36 @@ Frontend App will be live at: `http://localhost:5173`.
 
 ---
 
-## 🌐 Deployment Guide
+## 🌐 Deployment Guide (100% Native Vercel Full-Stack)
 
-### A. Deploy Frontend on Vercel
+TRINETRA is architected as a **unified monorepo** where both the React Vite frontend and the Python FastAPI ML backend deploy natively onto **Vercel** with zero third-party backend servers required.
 
-1. Push your repository to **GitHub**:
-   ```bash
-   git add .
-   git commit -m "feat: Initial commit of TRINETRA AI Disaster Intelligence"
-   git branch -M main
-   git remote add origin https://github.com/Tahaniazi786/trinetra.git
-   git push -u origin main
-   ```
-2. Go to **[Vercel Dashboard](https://vercel.com/new)** and click **Add New Project**.
-3. Import your `trinetra` repository.
-4. Configure project settings:
-   - **Framework Preset:** `Vite`
-   - **Root Directory:** `frontend`
-   - **Build Command:** `npm run build`
-   - **Output Directory:** `dist`
-5. **Environment Variables:**
-   - Name: `VITE_API_URL`
-   - Value: `https://your-backend-url.onrender.com` (or leave empty during local development)
-6. Click **Deploy**. Vercel will provision an edge SSL link (e.g. `https://trinetra.vercel.app`).
+### 🚀 Step-by-Step GitHub & Vercel Deployment
 
-### B. Deploy Backend (Render / Railway / Cloud Run)
-
-#### Option 1: Render (Free Web Service)
-1. Go to **[Render Dashboard](https://dashboard.render.com/)** -> **New Web Service**.
-2. Connect your GitHub `trinetra` repository.
-3. Configure settings:
-   - **Root Directory:** `backend`
-   - **Environment:** `Python 3`
-   - **Build Command:** `pip install -r requirements.txt`
-   - **Start Command:** `uvicorn main:app --host 0.0.0.0 --port $PORT`
-4. Deploy! Render will provide your public backend URL (e.g. `https://trinetra-api.onrender.com`).
-5. Copy this URL and set it as `VITE_API_URL` in your Vercel project settings.
-
-#### Option 2: Docker / Google Cloud Run
-A production-ready `Dockerfile` is included in `backend/Dockerfile`:
+#### 1. Push Code to Your GitHub Repository
+Run the following commands in your project root:
 ```bash
-cd backend
-docker build -t trinetra-backend .
-docker run -p 8000:8000 trinetra-backend
+git add .
+git commit -m "feat: TRINETRA Full-Stack AI Disaster Intelligence on Vercel"
+git branch -M main
+git remote add origin https://github.com/Tahaniazi786/trinetra.git
+git push -u origin main
 ```
+
+#### 2. One-Click Deploy on Vercel
+1. Go to your **[Vercel Dashboard](https://vercel.com/new)**.
+2. Select and **Import** your `trinetra` repository.
+3. In **Project Settings**:
+   - **Framework Preset**: Leave as default (or `Other` / `Vite`)
+   - **Root Directory**: `./` (leave default repository root)
+   - **Environment Variables**: None required! The app automatically routes API traffic to the serverless function on the same origin.
+4. Click **Deploy**.
+5. Vercel automatically builds:
+   - Python Serverless Functions under `api/index.py` (FastAPI + ML Models)
+   - Vite React Single Page Application in `frontend/dist`
+6. Your platform is immediately live at `https://trinetra.vercel.app` (or your assigned Vercel URL)!
+
+---
 
 ---
 

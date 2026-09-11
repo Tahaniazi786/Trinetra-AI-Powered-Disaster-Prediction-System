@@ -41,9 +41,17 @@ app.add_middleware(
 # LOAD MODELS
 # ============================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+risk_path = os.path.join(BASE_DIR, "model.pkl")
+if not os.path.exists(risk_path):
+    risk_path = os.path.join(os.path.dirname(BASE_DIR), "backend", "model.pkl")
+
+disaster_path = os.path.join(BASE_DIR, "disaster_type_model.pkl")
+if not os.path.exists(disaster_path):
+    disaster_path = os.path.join(os.path.dirname(BASE_DIR), "backend", "disaster_type_model.pkl")
+
 try:
-    risk_model = joblib.load(os.path.join(BASE_DIR, "model.pkl"))
-    disaster_model = joblib.load(os.path.join(BASE_DIR, "disaster_type_model.pkl"))
+    risk_model = joblib.load(risk_path)
+    disaster_model = joblib.load(disaster_path)
     print("ML models loaded successfully")
 except Exception as e:
     risk_model = None
@@ -1063,14 +1071,18 @@ def run_monitoring():
     finally:
         db.close()
 
-# Start scheduler
-scheduler = BackgroundScheduler()
-scheduler.add_job(
-    run_monitoring,
-    "interval",
-    minutes=5,  # Run every 5 minutes
-    max_instances=1,
-    coalesce=True
-)
-scheduler.start()
-print("Background monitoring scheduler started (every 5 min)")
+# Start scheduler (only in persistent daemon environments, disabled on Vercel serverless)
+if not os.environ.get("VERCEL"):
+    try:
+        scheduler = BackgroundScheduler()
+        scheduler.add_job(
+            run_monitoring,
+            "interval",
+            minutes=5,  # Run every 5 minutes
+            max_instances=1,
+            coalesce=True
+        )
+        scheduler.start()
+        print("Background monitoring scheduler started (every 5 min)")
+    except Exception as e:
+        print(f"Scheduler could not be started: {e}")

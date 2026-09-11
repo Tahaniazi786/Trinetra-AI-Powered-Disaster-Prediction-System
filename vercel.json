@@ -3,6 +3,14 @@
   "outputDirectory": "frontend/dist",
   "rewrites": [
     {
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/(weather|predict|records|locations|dashboard|history|health|docs|openapi.json)(.*)",
+      "destination": "/api/index.py"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
