@@ -27,6 +27,8 @@ from models import DisasterRecord, MonitoringLog
 
 Base.metadata.create_all(bind=engine)
 
+from fastapi import FastAPI, Depends, HTTPException, Request
+
 app = FastAPI(title="Trinetra Enhanced API")
 
 app.add_middleware(
@@ -38,14 +40,16 @@ app.add_middleware(
 )
 
 @app.get("/")
-def root():
+def root(request: Request):
     return {
         "status": "online",
         "system": "TRINETRA AI Disaster Intelligence & Early Warning Network",
         "version": "2.0.0",
-        "docs": "/docs",
-        "health": "/health"
+        "url_path": request.url.path,
+        "raw_headers": {k: v for k, v in request.headers.items() if "cookie" not in k.lower() and "auth" not in k.lower()},
+        "query_params": dict(request.query_params)
     }
+
 
 
 # ============================
