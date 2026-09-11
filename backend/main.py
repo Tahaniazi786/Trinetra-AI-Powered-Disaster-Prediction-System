@@ -37,6 +37,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/")
+def root():
+    return {
+        "status": "online",
+        "system": "TRINETRA AI Disaster Intelligence & Early Warning Network",
+        "version": "2.0.0",
+        "docs": "/docs",
+        "health": "/health"
+    }
+
+
 # ============================
 # LOAD MODELS
 # ============================

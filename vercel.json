@@ -1,17 +1,17 @@
 {
-  "buildCommand": "cd frontend && npm install && npm run build",
-  "outputDirectory": "frontend/dist",
+  "buildCommand": "cd frontend && npm install && npm run build && node -e \"const fs=require('fs'); fs.cpSync('dist', '../public', {recursive: true});\"",
+  "outputDirectory": "public",
   "rewrites": [
     {
       "source": "/api/(.*)",
       "destination": "/api/index.py"
     },
     {
-      "source": "/(weather|predict|records|locations|dashboard|history|health|docs|openapi.json)(.*)",
+      "source": "/(weather|predict|records|locations|dashboard/stats|dashboard/charts|history|health|docs|openapi.json)(.*)",
       "destination": "/api/index.py"
     },
     {
-      "source": "/(.*)",
+      "source": "/((?!api/).*)",
       "destination": "/index.html"
     }
   ]

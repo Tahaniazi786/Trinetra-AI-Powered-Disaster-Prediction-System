@@ -4,7 +4,7 @@
   "private": true,
   "description": "AI-Powered Real-Time Disaster Intelligence & Early Warning Network for India",
   "scripts": {
-    "build": "cd frontend && npm install && npm run build",
+    "build": "cd frontend && npm install && npm run build && node -e \"const fs=require('fs'); fs.cpSync('dist', '../public', {recursive: true});\"",
     "frontend": "cd frontend && npm run dev",
     "backend": "cd backend && python -m uvicorn main:app --reload --port 8000"
   }
