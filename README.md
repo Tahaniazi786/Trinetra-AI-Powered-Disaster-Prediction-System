@@ -157,8 +157,8 @@ trinetra/
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/Tahaniazi786/trinetra.git
-cd trinetra
+git clone https://github.com/Tahaniazi786/Trinetra-AI-Powered-Disaster-Prediction-System.git
+cd Trinetra-AI-Powered-Disaster-Prediction-System
 ```
 
 ### 2. Backend Setup
@@ -208,7 +208,7 @@ Run the following commands in your project root:
 git add .
 git commit -m "feat: TRINETRA Full-Stack AI Disaster Intelligence on Vercel"
 git branch -M main
-git remote add origin https://github.com/Tahaniazi786/trinetra.git
+git remote add origin https://github.com/Tahaniazi786/Trinetra-AI-Powered-Disaster-Prediction-System.git
 git push -u origin main
 ```
 
