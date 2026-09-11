@@ -1,5 +1,6 @@
 import sys
 import os
+import re
 from urllib.parse import parse_qs, urlencode
 
 # Set VERCEL environment flag if not present
@@ -20,7 +21,8 @@ from main import app as fastapi_app
 class VercelPathNormalizationMiddleware:
     """
     Normalizes ASGI request paths on Vercel Serverless Functions.
-    Resolves both query parameter forwarded paths (__path) and header-based paths.
+    Handles catch-all parameters (slug), forwarded query paths (__path),
+    and Vercel routing headers.
     """
     def __init__(self, app):
         self.app = app
@@ -37,14 +39,23 @@ class VercelPathNormalizationMiddleware:
             raw_query = scope.get("query_string", b"").decode("latin1")
             params = parse_qs(raw_query, keep_blank_values=True)
             
-            # 1. Check if Vercel rewrite passed __path query parameter
-            if "__path" in params:
-                resolved_path = params.pop("__path")[0]
-                # Reconstruct clean query string without __path
+            resolved_path = None
+
+            # 1. Handle Vercel catch-all slug parameter: /api/[...slug].py
+            if "slug" in params:
+                slug_parts = params.pop("slug")
+                resolved_path = "/" + "/".join(slug_parts)
                 clean_query = urlencode([(k, v) for k, vs in params.items() for v in vs])
                 scope["query_string"] = clean_query.encode("latin1")
-            else:
-                # 2. Fallback to rewrite headers or scope path
+            
+            # 2. Handle __path query parameter if present
+            elif "__path" in params:
+                resolved_path = params.pop("__path")[0]
+                clean_query = urlencode([(k, v) for k, vs in params.items() for v in vs])
+                scope["query_string"] = clean_query.encode("latin1")
+
+            # 3. Fallback to rewrite headers or scope path
+            if not resolved_path:
                 orig = (
                     self._get_header(scope, "x-matched-path")
                     or self._get_header(scope, "x-forwarded-uri")
@@ -52,15 +63,18 @@ class VercelPathNormalizationMiddleware:
                 )
                 resolved_path = orig.split("?")[0]
 
-            # Strip leading /api if present
+            # Strip leading /api prefix
             if resolved_path.startswith("/api/"):
                 resolved_path = resolved_path[4:]
             elif resolved_path == "/api":
                 resolved_path = "/"
 
-            # Normalize root and script-like paths
-            if resolved_path in ("/index.py", "index.py", "", "/api/index.py"):
+            # Normalize script-like and empty paths
+            if resolved_path in ("/index.py", "index.py", "", "/api/index.py", "/[...slug].py", "[...slug].py"):
                 resolved_path = "/"
+
+            # Deduplicate multiple slashes
+            resolved_path = re.sub(r"/+", "/", resolved_path)
 
             if not resolved_path.startswith("/"):
                 resolved_path = "/" + resolved_path

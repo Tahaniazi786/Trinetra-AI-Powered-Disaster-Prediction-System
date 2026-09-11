@@ -4,11 +4,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/api/index.py?__path=/$1"
-    },
-    {
-      "source": "/(weather|predict|records|locations|dashboard/stats|dashboard/charts|history|health|docs|openapi.json)(.*)",
-      "destination": "/api/index.py?__path=/$1$2"
+      "destination": "/api/[...slug].py?slug=$1"
     },
     {
       "source": "/((?!api/).*)",
