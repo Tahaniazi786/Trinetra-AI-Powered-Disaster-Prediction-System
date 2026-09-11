@@ -2,17 +2,21 @@
 
 # 🛰️ TRINETRA: AI Disaster Intelligence & Early Warning System
 
+[![Live Demo](https://img.shields.io/badge/Live%20Platform-aipredictiondisastersystem.vercel.app-0070F3?style=for-the-badge&logo=vercel&logoColor=white)](https://aipredictiondisastersystem.vercel.app)
+
 [![React](https://img.shields.io/badge/Frontend-React%2018%20%7C%20Vite-61DAFB?logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/Language-TypeScript-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)](https://python.org/)
 [![Scikit-Learn](https://img.shields.io/badge/ML-Scikit--Learn-F7931E?logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
-[![Vercel](https://img.shields.io/badge/Deploy-Vercel-000000?logo=vercel&logoColor=white)](https://vercel.com/)
+[![Vercel](https://img.shields.io/badge/Deploy-Vercel%20Serverless-000000?logo=vercel&logoColor=white)](https://vercel.com/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 **TRINETRA** (*The All-Seeing Eye*) is a real-time natural hazard intelligence platform designed to protect lives and coordinate humanitarian emergency relief across India. Powered by dual ensemble machine learning models trained on verified historical observations and live atmospheric/seismic telemetry.
 
-[Live Demo](#-deployment-guide) • [Architecture](#-system-architecture) • [ML Specifications](#-machine-learning--empirical-validation) • [Quickstart](#-local-installation--setup) • [API Docs](#-api-endpoints)
+### 🌐 **[Launch Live Platform ➔ https://aipredictiondisastersystem.vercel.app](https://aipredictiondisastersystem.vercel.app)**
+
+[Live Demo](https://aipredictiondisastersystem.vercel.app) • [Architecture](#-system-architecture) • [ML Specifications](#-machine-learning--empirical-validation) • [Quickstart](#-local-installation--setup) • [API Docs](#-api-endpoints)
 
 ---
 
@@ -96,54 +100,52 @@ The model pipeline is trained on `ml/verified_disaster_dataset.csv` (10,362 genu
 
 | Layer | Technologies | Role in System |
 |---|---|---|
-| **Frontend** | React 18, Vite, TypeScript | Client Single Page Application (SPA) |
-| **Styling** | Tailwind CSS, Lucide Icons | Dark HUD tactical styling, glassmorphism |
-| **Animation** | Framer Motion | Fluid telemetry and layout transitions |
+| **Frontend** | React 18, Vite 6, TypeScript | Client Single Page Application (SPA) |
+| **Styling** | Tailwind CSS v4, Lucide Icons | Dark HUD tactical styling, glassmorphism |
+| **Animation** | Motion (Framer Motion) | Fluid telemetry and layout transitions |
 | **Mapping** | Leaflet.js, Esri Canvas | Watermark-free geospatial hazard mapping |
 | **Charts** | Recharts | 7-day empirical database observation trends |
 | **Backend** | FastAPI, Uvicorn, Python 3.11 | High-throughput asynchronous REST API |
 | **ML Engine** | Scikit-learn, Joblib, NumPy, Pandas | Dual trained ensemble model inference |
-| **Storage** | SQLite, SQLAlchemy ORM | Local zero-dependency observation logging |
-| **Deployment** | Vercel (Frontend), Render/Docker (Backend) | Global edge CDN + containerized backend |
+| **Storage** | SQLite, SQLAlchemy ORM | Dual-mode observation logging (stateless serverless / local) |
+| **Deployment** | 100% Native Vercel Serverless | Global Edge CDN (Frontend) + Python ASGI Functions (Backend) |
 
 ---
 
 ## 📁 Repository Structure
 
 ```
-trinetra/
-├── backend/
-│   ├── main.py                     # FastAPI REST routes & background scheduler
-│   ├── models.py                   # SQLAlchemy database schemas (MonitoringLog, etc.)
-│   ├── database.py                 # SQLite engine & session management
-│   ├── model.pkl                   # Trained Random Forest risk classifier (9.8 MB)
-│   ├── disaster_type_model.pkl     # Trained Gradient Boosting hazard classifier (28 MB)
-│   ├── requirements.txt            # Python production dependencies (pinned)
-│   ├── Procfile                    # Cloud start command (Render/Railway/Koyeb)
-│   ├── Dockerfile                  # Containerized deployment spec
-│   └── services/
-│       ├── data_fetch/             # Live weather (Open-Meteo/OWM) & seismic feeds
-│       ├── risk_classifier.py      # Classification heuristics & labels
-│       └── humanitarian_aid.py     # NDMA protocols & emergency contact mapping
-│
-├── frontend/
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── config/api.ts       # Centralized API URL (VITE_API_URL support)
-│   │   │   ├── components/         # DisasterMap, Layout, Navbar, UI cards
-│   │   │   └── pages/              # Home, Dashboard, PredictionPage, MapPage, AboutPage
-│   │   └── styles/                 # Tailwind CSS & theme tokens
-│   ├── package.json                # Frontend dependencies & Vite scripts
-│   ├── vercel.json                 # Vercel SPA client-side routing rewrites
-│   └── .env.example                # Frontend environment template
-│
-├── ml/
-│   ├── train_model.py              # Empirical training script with cross-validation
-│   └── verified_disaster_dataset.csv # 10,362 genuine records (ERA5 + CRED EM-DAT)
-│
-├── vercel.json                     # Root-level Vercel deployment routing
-├── .gitignore                      # Excludes raw multi-GB parquet files & caches
-└── README.md                       # Documentation & deployment guide
+Trinetra-AI-Powered-Disaster-Prediction-System/
+├── 📄 .gitignore                  # Pinned exclusion rules (venv, datasets, cache)
+├── 📄 ATTRIBUTIONS.md             # Data citations (ECMWF Copernicus, CRED EM-DAT, USGS)
+├── 📄 LICENSE                     # MIT Open-Source License
+├── 📄 README.md                   # System documentation & deployment guide
+├── 📄 package.json                # Monorepo build & development scripts
+├── 📄 requirements.txt            # Python serverless dependencies
+├── 📄 vercel.json                 # Vercel routing rules & rewrites
+├── 📁 api/                        # Vercel Serverless Function Bridge
+│   ├── index.py                   # FastAPI ASGI adapter & path normalizer
+│   ├── [...slug].py               # Dynamic catch-all API router
+│   └── requirements.txt           # Pinned runtime dependencies
+├── 📁 backend/                    # Core Python FastAPI Application
+│   ├── database.py                # Dual SQLite engine (temp serverless / persistent local)
+│   ├── main.py                    # 14 REST API endpoints & scheduler guard
+│   ├── models.py                  # SQLAlchemy ORM schemas
+│   ├── requirements.txt           # Local development dependencies
+│   ├── model.pkl                  # Trained binary risk classifier (9.40 MB)
+│   ├── disaster_type_model.pkl    # Trained multi-hazard classifier (26.71 MB)
+│   └── services/                  # Real-time weather, seismic, risk & relief logic
+├── 📁 frontend/                   # React 18 + Vite 6 Single Page Application
+│   ├── index.html                 # App entrypoint
+│   ├── package.json               # Frontend dependencies (Leaflet, Tailwind, Recharts)
+│   ├── vite.config.ts             # Vite build configuration
+│   └── src/                       # Interactive UI, tactical maps, and live simulator
+├── 📁 ml/                         # Machine Learning Pipeline
+│   ├── train_model.py             # Reproducible dual-ensemble training script
+│   └── verified_disaster_dataset.csv # Clean verified training dataset
+└── 📁 public/                     # Pre-compiled static assets for Edge CDN
+    ├── index.html
+    └── assets/
 ```
 
 ---
@@ -196,36 +198,16 @@ Frontend App will be live at: `http://localhost:5173`.
 
 ---
 
-## 🌐 Deployment Guide (100% Native Vercel Full-Stack)
+## 🌐 Full-Stack Vercel Deployment
 
 TRINETRA is architected as a **unified monorepo** where both the React Vite frontend and the Python FastAPI ML backend deploy natively onto **Vercel** with zero third-party backend servers required.
 
-### 🚀 Step-by-Step GitHub & Vercel Deployment
-
-#### 1. Push Code to Your GitHub Repository
-Run the following commands in your project root:
-```bash
-git add .
-git commit -m "feat: TRINETRA Full-Stack AI Disaster Intelligence on Vercel"
-git branch -M main
-git remote add origin https://github.com/Tahaniazi786/Trinetra-AI-Powered-Disaster-Prediction-System.git
-git push -u origin main
-```
-
-#### 2. One-Click Deploy on Vercel
+### 🚀 One-Click Deploy on Vercel
 1. Go to your **[Vercel Dashboard](https://vercel.com/new)**.
-2. Select and **Import** your `trinetra` repository.
-3. In **Project Settings**:
-   - **Framework Preset**: Leave as default (or `Other` / `Vite`)
-   - **Root Directory**: `./` (leave default repository root)
-   - **Environment Variables**: None required! The app automatically routes API traffic to the serverless function on the same origin.
+2. Select and **Import** your `Trinetra-AI-Powered-Disaster-Prediction-System` repository.
+3. Keep all default project settings untouched (**no environment variables needed**).
 4. Click **Deploy**.
-5. Vercel automatically builds:
-   - Python Serverless Functions under `api/index.py` (FastAPI + ML Models)
-   - Vite React Single Page Application in `frontend/dist`
-6. Your platform is immediately live at `https://trinetra.vercel.app` (or your assigned Vercel URL)!
-
----
+5. Both the Python serverless functions and the React frontend will deploy automatically on your live URL!
 
 ---
 
@@ -234,7 +216,7 @@ git push -u origin main
 | Method | Endpoint | Description |
 |---|---|---|
 | `GET` | `/health` | API liveness probe & ML model status |
-| `GET` | `/weather/live?city={city}` | Real-world telemetry + instant ML inference for ANY city |
+| `GET` | `/weather/live?city={city}` | Real-world telemetry + instant ML inference for ANY Indian city |
 | `POST` | `/predict` | Multi-parametric risk evaluation on custom measurements |
 | `GET` | `/locations` | Live hazard assessment for 15 primary national monitored nodes |
 | `GET` | `/locations/lookup?query={place}` | Pan-India dynamic geocoding, ML scoring & node pinning |
